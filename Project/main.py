@@ -5,7 +5,7 @@ kivy.require("1.10.0")
 
 import data
 #loads the code from data.py
-
+#this is trey 
 class Application(App):
 
     def build(self):
