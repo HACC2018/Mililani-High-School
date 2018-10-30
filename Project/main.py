@@ -3,8 +3,8 @@ from kivy.app import App
 from kivy.uix.label import Label
 kivy.require("1.10.0")
 
-import data
-#loads the code from data.py
+import database.database as database
+#loads the code from database/database.py
 
 class Application(App):
 
