@@ -6,14 +6,14 @@ class DataPoint:
         self.kilowatts = kilowatts
 
 
-class Building(DataPoint):
+class Building:
 
     def __init__(self, name, dataPoints):
         self.name = name
         self.dataPoints = dataPoints
 
 
-class Campus(Building):
+class Campus:
 
     def __init__(self, name, buildings):
         self.name = name
