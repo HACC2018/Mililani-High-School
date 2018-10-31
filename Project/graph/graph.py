@@ -1,5 +1,5 @@
 #import matplotlib here
-import matplotlib.pyplot as plt 
+from matplotlib.pyplot import plt, pie
 #testing
 timePoints = [15, 30, 40, 45, 60]
 kilowattPoints = [4, 5, 77, 234, 100] 
@@ -17,7 +17,17 @@ class Graph:
 		self.kilowatts = kilowatts 
 
 		plt.plot(self.time,self.kilowatts)
+
+	def drawPie(self, buildings, timeFrame):
+		self.buildings = buildings
+		self.timeFrame = timeFrame 
+
 		
+
+
+
+
+	
 		
 
 graph = Graph(timePoints,kilowattPoints)
