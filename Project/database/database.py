@@ -1,4 +1,4 @@
-import datatype
+import database.datatype as datatype
 #loads the code from datatype.py
 
 class Database():
