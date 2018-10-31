@@ -21,4 +21,7 @@ class Campus:
         self.buildings = buildings
 
 
+<<<<<<< HEAD:Project/data.py
+=======
 campus = Campus(0,0)
+>>>>>>> 8f866b828064af5c52160e7b9bcc36cea914415d:Project/database/datatype.py
