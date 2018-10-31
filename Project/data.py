@@ -19,3 +19,4 @@ class Campus(Building):
         self.name = name
         self.buildings = buildings
 
+
