@@ -1,3 +1,7 @@
+from kivy.config import Config
+Config.set('graphics', 'resizable', '0')
+Config.set('graphics','width','1280')
+Config.set('graphics', 'height', '700')
 from kivy.app import App
 from kivy.base import runTouchApp
 from kivy.uix.boxlayout import BoxLayout
@@ -10,7 +14,7 @@ from kivy.metrics import dp
 
 from kivy.garden.navigationdrawer import NavigationDrawer
 
-from database.database import Database
+#from database.database import Database
 
 class Application(App):
 
@@ -24,48 +28,23 @@ class Application(App):
 
         main_panel = BoxLayout(orientation='vertical')
 
-        main_panel.add_widget(Widget(size_hint_y=None, height=dp(4)))
-        main_panel.add_widget(Widget(size_hint_y=None, height=dp(10)))
         navigationdrawer.add_widget(main_panel)
 
-        def set_anim_type(name):
-            navigationdrawer.anim_type = name
         modes_layout = BoxLayout(orientation='horizontal')
 
-        #modes_layout.add_widget(Label(text='preset\nanims:'))
-        #slide_an = Button(text='slide_\nabove_\nanim')
-        #slide_an.bind(on_press=lambda j: set_anim_type('slide_above_anim'))
-        #slide_sim = Button(text='slide \nabove \nsimple')
-        #slide_sim.bind(on_press=lambda j: set_anim_type('slide_above_simple'))
-        #fade_in_button = Button(text='fade_in')
-        #fade_in_button.bind(on_press=lambda j: set_anim_type('fade_in'))
-        #reveal_button = Button(text='reveal_\nbelow_\nanim')
-        #reveal_button.bind(on_press=
-                           #lambda j: set_anim_type('reveal_below_anim'))
-        #slide_button = Button(text='reveal_\nbelow_\nsimple')
-        #slide_button.bind(on_press=
-        lambda j: set_anim_type('reveal_above_simple')
-        #modes_layout.add_widget(slide_an)
-        #modes_layout.add_widget(slide_sim)
-        #modes_layout.add_widget(fade_in_button)
-        #modes_layout.add_widget(reveal_button)
-        #modes_layout.add_widget(slide_button)
         main_panel.add_widget(modes_layout)
 
-        button = Button(text='toggle NavigationDrawer state (animate)',
-                        size_hint_y=0.2)
-        lambda j: set_anim_type('fade_in')
-        button.bind(on_press=lambda j: navigationdrawer.toggle_state())
-        button2 = Button(text='toggle NavigationDrawer state (jump)',
-                         size_hint_y=0)
-        button2.bind(on_press=lambda j: navigationdrawer.toggle_state(False))
-        button3 = Button(text='toggle _main_above', size_hint_y=0.2)
 
+
+        navigationdrawer.toggle_state(True)
+        def show_drawer(toggle):
+            if toggle == 1:
+                navigationdrawer.toggle_state(True)
+        button = Button(text= "show", background_color = (1,2,2,1), size_hint = (0.1,0.1), pos_hint = {'top': 5})
+        button.bind(on_press = lambda j: show_drawer(1))
         main_panel.add_widget(button)
-        #main_panel.add_widget(button2)
-        main_panel.add_widget(button3)
-
         return navigationdrawer
 
+
 if __name__ == "__main__":
-    ExampleApp().run()
+    Application().run()
