@@ -1,8 +1,8 @@
 class DataPoint:
 
-    def __init__(self, date, time, kilowatts):
+    def __init__(self, timestamp, kilowatts):#store timeStamp as a unix timestamp
         self.date = date
-        self.time = time
+        self.timestamp = timestamp
         self.kilowatts = kilowatts
 
 
