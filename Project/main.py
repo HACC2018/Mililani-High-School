@@ -68,4 +68,4 @@ class Application(App):
         return navigationdrawer
 
 if __name__ == "__main__":
-    ExampleApp().run()
+    Application().run()
