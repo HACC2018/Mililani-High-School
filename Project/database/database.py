@@ -9,7 +9,7 @@ class Database():
 
 	buildings = []
 	dataInterval = []
-	#time is handled in int(unix timestamp) form (make sure you convert to int)
+	#time is handled in int(unix timestamp) form (make sure you conve rt to int)
 
 	def __init__(self, csvFile):
 		#look through the csv and add each building a list
@@ -39,12 +39,13 @@ class Database():
 
 
 	def SetUnixToDate(self, unix):#input unix time as string or int
-		unix = int(unix) #makes it an int
-		return datetime.datetime.utcfromtimestamp(unix).strftime('%x %X')
+		unix = int(unix) #gets rid of utc time difference of 10 hours
+		return datetime.datetime.utcfromtimestamp(unix).strftime(' %m/%d/%Y %I:%M:%S %p')
 
 	def SetDateToUnix(self, date):#input date string
+		print(date)# the utc problem happens at the unix conversion
 		utc = datetime.datetime.strptime(date, ' %m/%d/%Y %I:%M:%S %p')
-		return utc.timestamp()
+		return int(utc.timestamp()) - 36000#unix is UTC time which is 10 hours ahead (36000 seconds)
 
 
 	def AddBuilding(self, buildingIndex):#send the building by index of buildings list
