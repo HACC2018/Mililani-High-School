@@ -62,5 +62,5 @@ class Database():
 
 
 #initializes an instance of database
-database = Database('AnalyticsData_20181019174047.csv')#test csv
+database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
 #building = Building(buildings[0])
