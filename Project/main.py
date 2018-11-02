@@ -1,5 +1,8 @@
+from kivy.config import Config
+Config.set('graphics', 'resizable', '0')
+Config.set('graphics','width','1280')
+Config.set('graphics', 'height', '700')
 from kivy.app import App
-from kivy.base import runTouchApp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -7,65 +10,101 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.metrics import dp
+from kivy.uix.tabbedpanel import TabbedPanel
+from kivy.uix.tabbedpanel import TabbedPanelHeader
+from kivy.properties import ObjectProperty
+from kivy.lang import Builder
 
-from kivy.garden.navigationdrawer import NavigationDrawer
 
-from database.database import Database
+#Format for time interval MM/DD/YYYY HH:MM:SS AM/PM. No leading zeroes
+
+#from database.database import Database
+Builder.load_string('''
+<MyWidget>:
+    orientation: "vertical"
+    padding: 0
+    spacing: 3
+    BoxLayout:
+        orientation: "horizontal"
+        Label:
+            text: "Type of Graph:"
+            color: 1, 1, 1, 1
+            size_hint_x: 
+            
+    Label:
+        text: "Line Graph"
+        color: 1, 1, 1, 1
+        size_hint_x: .15
+    CheckBox:
+        group: "graph_type"
+        value: root.line
+        size_hint_x: .15
+
+    Label:
+        text: "Bar Graph"
+        color: 1, 1, 1, 1
+        size_hint_x: .15
+    CheckBox:
+        group: "graph_type"
+        value: root.bar
+        size_hint_x: .15
+
+    Label:
+        text: "Pie Graph"
+        color: 1, 1, 1, 1
+        size_hint_x: .15
+    CheckBox:
+        group: "graph_type"
+        value: root.pie
+        size_hint_x: .15
+
+
+
+''')
+
+
+class MyWidget(BoxLayout):
+    line = ObjectProperty(False)
+    bar = ObjectProperty(False)
+    pie = ObjectProperty(False)
+
 
 class Application(App):
 
     def build(self):
-        navigationdrawer = NavigationDrawer()
+        button_b = 0.1
+        button_h = 0
 
-        side_panel = BoxLayout(orientation='vertical')
-        side_panel.add_widget(Label(text='Select Representation'))
-        side_panel.add_widget(Button(text='Graphs'))
-        navigationdrawer.add_widget(side_panel)
 
-        main_panel = BoxLayout(orientation='vertical')
+        tb_panel = TabbedPanel()
 
-        main_panel.add_widget(Widget(size_hint_y=None, height=dp(4)))
-        main_panel.add_widget(Widget(size_hint_y=None, height=dp(10)))
-        navigationdrawer.add_widget(main_panel)
+        building_content= BoxLayout(orientation = "vertical")
+        building_content.add_widget(Label(text="end me"))
+        building_content.add_widget(Label(text="nah b u good"))
 
-        def set_anim_type(name):
-            navigationdrawer.anim_type = name
-        modes_layout = BoxLayout(orientation='horizontal')
 
-        #modes_layout.add_widget(Label(text='preset\nanims:'))
-        #slide_an = Button(text='slide_\nabove_\nanim')
-        #slide_an.bind(on_press=lambda j: set_anim_type('slide_above_anim'))
-        #slide_sim = Button(text='slide \nabove \nsimple')
-        #slide_sim.bind(on_press=lambda j: set_anim_type('slide_above_simple'))
-        #fade_in_button = Button(text='fade_in')
-        #fade_in_button.bind(on_press=lambda j: set_anim_type('fade_in'))
-        #reveal_button = Button(text='reveal_\nbelow_\nanim')
-        #reveal_button.bind(on_press=
-                           #lambda j: set_anim_type('reveal_below_anim'))
-        #slide_button = Button(text='reveal_\nbelow_\nsimple')
-        #slide_button.bind(on_press=
-        lambda j: set_anim_type('reveal_above_simple')
-        #modes_layout.add_widget(slide_an)
-        #modes_layout.add_widget(slide_sim)
-        #modes_layout.add_widget(fade_in_button)
-        #modes_layout.add_widget(reveal_button)
-        #modes_layout.add_widget(slide_button)
-        main_panel.add_widget(modes_layout)
 
-        button = Button(text='toggle NavigationDrawer state (animate)',
-                        size_hint_y=0.2)
-        lambda j: set_anim_type('fade_in')
-        button.bind(on_press=lambda j: navigationdrawer.toggle_state())
-        button2 = Button(text='toggle NavigationDrawer state (jump)',
-                         size_hint_y=0)
-        button2.bind(on_press=lambda j: navigationdrawer.toggle_state(False))
-        button3 = Button(text='toggle _main_above', size_hint_y=0.2)
+        th_interval_head = TabbedPanelHeader(text='Interval')
+        th_interval_head.content = Label(text='interval code here')
 
-        main_panel.add_widget(button)
-        #main_panel.add_widget(button2)
-        main_panel.add_widget(button3)
+        th_building_head = TabbedPanelHeader(text="Building")
+        th_building_head.content = building_content
 
-        return navigationdrawer
+        th_lgraph_head = TabbedPanelHeader(text='Graphs')
+        th_lgraph_head.content = MyWidget()
+
+        tb_panel.default_tab_text = "Home"
+
+        tb_panel.add_widget(th_interval_head)
+        tb_panel.add_widget(th_building_head)
+        tb_panel.add_widget(th_lgraph_head)
+
+        return tb_panel
+
+
+
+
+
 
 if __name__ == "__main__":
     Application().run()
