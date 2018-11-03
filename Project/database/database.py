@@ -35,7 +35,8 @@ class Database():
 			start = Database.dataInterval[0]
 		if (end > Database.dataInterval[1]):
 			end = Database.dataInterval[1]
-		self.interval = [start, end]
+		self.unixInterval = [self.SetDateToUnix(start), self.SetDateToUnix(end)]
+		self.dateInterval = [start, end]
 
 
 	def SetUnixToDate(self, unix):#input unix time as string or int
@@ -56,10 +57,18 @@ class Database():
 
 		#we will only refer to buildings by their index in the list, never by name
 
-	def ReadCSV(self):
-		pass
-
-
+	def ReadCSV(self, buildingIndex):
+		CSVDATA = csv.reader(open("AnalyticsData_20181019174047.csv"), delimiter=",")
+		building = Building()
+		for x in len(list(CSVDATA)):
+			currentLine = CSVDATA.__next__()
+			if int(self.SetDateToUnix(currentLine[0])) >= int(self.unixInterval[0]):
+				datapoint = DataPoint(int(self.SetDateToUnix(currentLine[0])), currentLine[buildingIndex])
+				building.dataPoints.append(datapoint)
+			if int(self.SetDateToUnix(currentLine[0])) > int(self.unixInterval[1]):
+				x = len(list(CSVDATA))
+				print("Finished")
+		return building
 
 #initializes an instance of database
 database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
