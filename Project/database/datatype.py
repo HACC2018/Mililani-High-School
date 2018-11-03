@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt 
+
 class DataPoint:
 
     def __init__(self):#store timeStamp as a unix timestamp
