@@ -1,8 +1,8 @@
-import matplotlib.pyplot as plt 
+#import matplotlib.pyplot as plt 
 
 class DataPoint:
 
-    def __init__(self, timestamp, kilowatts):#store timeStamp as a unix timestamp
+    def __init__(self, timestamp, kilowatts):#store timestamp as a unix timestamp
         self.timestamp = timestamp
         self.kilowatts = kilowatts
 

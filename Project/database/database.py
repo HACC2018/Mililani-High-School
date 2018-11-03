@@ -5,7 +5,7 @@ import csv
 import datetime
 import time
 
-class Database():
+class Database:
 
 	buildings = []
 	dataInterval = []
@@ -15,6 +15,7 @@ class Database():
 		#look through the csv and add each building a list
 		#in the same loop get the earliest timstamp and latest
 
+		self.csv = csvFile
 		Database.buildings = list(csv.reader(open(csvFile), delimiter=','))[0]#total buildings list
 		del Database.buildings[0]#delete time entry from building list
 		self.selectedBuildings = []#we will append building indexes to this
@@ -33,18 +34,16 @@ class Database():
 	def SetInterval(self, start, end):#input as datetime string
 		if (int(self.SetDateToUnix(start)) < Database.dataInterval[0]):
 			start = self.SetUnixToDate(Database.dataInterval[0])
-		if (int(self.SetDateToUnix(end)) < Database.dataInterval[1]):
+		if (int(self.SetDateToUnix(end)) > Database.dataInterval[1]):
 			end = self.SetUnixToDate(Database.dataInterval[1])
 		self.unixInterval = [int(self.SetDateToUnix(start)), int(self.SetDateToUnix(end))]
-		self.dateInterval = [start, end]
+		self.dateInterval = [start, end] #in utc format, not csv format
 
 
 	def SetUnixToDate(self, unix):#input unix time as string or int
-		unix = int(unix) #gets rid of utc time difference of 10 hours
 		return datetime.datetime.utcfromtimestamp(unix).strftime(' %m/%d/%Y %I:%M:%S %p')
 
 	def SetDateToUnix(self, date):#input date string
-		#print(date)# the utc problem happens at the unix conversion
 		utc = datetime.datetime.strptime(date, ' %m/%d/%Y %I:%M:%S %p')
 		return int(utc.timestamp()) - 36000#unix is UTC time which is 10 hours ahead (36000 seconds)
 
@@ -57,7 +56,7 @@ class Database():
 
 		#we will only refer to buildings by their index in the list, never by name
 
-	def ReadCSV(self):#put a list of indexes as the parameter
+	def ReadData(self):#read selected buildings and corresponding data points into classes
 		self.buildings = []
 		if self.selectedBuildings == []:
 			return []
@@ -66,24 +65,24 @@ class Database():
 			building = datatype.Building()
 			self.buildings.append(building)
 
-		with open("csv/AnalyticsData_20181019174047.csv") as csvFile:
+		with open(self.csv) as csvFile:
 
 			CSVDATA = csv.reader(csvFile, delimiter=",")
 			rowNum = 0
 			for row in CSVDATA:
-				if rowNum == 0:
+				if rowNum == 0:#set names of slected buildings if on first row
 					for i in range(0,len(self.selectedBuildings)):
 						self.buildings[i].name = row[self.selectedBuildings[i]]#skips first column because it is empty
 				else:
 					columnNum = 0
 					for column in row:
-						if columnNum in self.selectedBuildings:
+						if columnNum in self.selectedBuildings:#only add data if column is selected
 							dataPoint = datatype.DataPoint(row[0], row[columnNum])
-							self.buildings[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)
+							self.buildings[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
 						columnNum += 1
 					print(row[0], " | ", self.buildings[0].name, self.buildings[0].dataPoints[rowNum - 1].kilowatts, " | ", self.buildings[1].name, self.buildings[1].dataPoints[rowNum - 1].kilowatts)
 				rowNum += 1
-		return self.buildings
+		return self.buildings#return list of building classes
 
 
 
@@ -95,4 +94,4 @@ database.SetInterval(" 1/3/2018 10:30:00 AM", " 1/10/2018 10:30:00 AM")
 database.AddBuilding(3)
 database.AddBuilding(1)
 
-database.ReadCSV()
+database.ReadData()
