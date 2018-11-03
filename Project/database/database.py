@@ -58,26 +58,34 @@ class Database():
 		#we will only refer to buildings by their index in the list, never by name
 
 	def ReadCSV(self):#put a list of indexes as the parameter
+		self.buildings = []
+		if self.selectedBuildings == []:
+			return []
+
 		for i in self.selectedBuildings:
-			print("fuck python")
 			building = datatype.Building()
-			#print("building", self.selectedBuildings[i])
-			CSVDATA = csv.reader(open("csv/AnalyticsData_20181019174047.csv"), delimiter=",")
-			print(len(list(CSVDATA)))
-			self.buildings = []
-			currentLine = []
-			for j in range(1, len(list(CSVDATA))):
-				print("before")
-				#currentLine = CSVDATA.__next__()
-				print("after")
-				if int(self.SetDateToUnix(currentLine[0])) >= int(self.unixInterval[0]):
-					datapoint = datatype.DataPoint(int(self.SetDateToUnix(currentLine[0])), currentLine[self.selectedBuildings[i]])
-					building.dataPoints.append(datapoint)
-					print(dataPoint.timestamp, " : ", dataPoint.kilowatts)
-				if int(self.SetDateToUnix(currentLine[0])) > int(self.unixInterval[1]):
-					j = len(list(CSVDATA))
 			self.buildings.append(building)
+
+		with open("csv/AnalyticsData_20181019174047.csv") as csvFile:
+
+			CSVDATA = csv.reader(csvFile, delimiter=",")
+			rowNum = 0
+			for row in CSVDATA:
+				if rowNum == 0:
+					for i in range(0,len(self.buildings)):
+						self.buildings[i].name = row[i + 1]#skips first column because it is empty
+				else:
+					columnNum = 0
+					for column in row:
+						if columnNum in self.selectedBuildings:
+							dataPoint = datatype.DataPoint(row[0], row[columnNum])
+							self.buildings[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)
+						columnNum += 1
+					print(row[0], " | ", self.buildings[0].dataPoints[rowNum - 1].kilowatts, " | ", self.buildings[1].dataPoints[rowNum - 1].kilowatts)
+				rowNum += 1
 		return self.buildings
+
+
 
 #initializes an instance of database
 database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
@@ -85,6 +93,6 @@ database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
 
 database.SetInterval(" 1/3/2018 10:30:00 AM", " 1/10/2018 10:30:00 AM")
 database.AddBuilding(1)
-
+database.AddBuilding(3)
 
 database.ReadCSV()
