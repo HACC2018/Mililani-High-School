@@ -16,11 +16,6 @@ from kivy.uix.tabbedpanel import TabbedPanelHeader
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.popup import Popup
-from kivy.garden.circulardatetimepicker import CircularTimePicker
-import datepicker
-from datepicker import CalendarWidget
-#Format for time interval MM/DD/YYYY HH:MM:SS AM/PM. No leading zeroes
-from datepicker import DatePicker
 from kivy.uix.textinput import TextInput
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
@@ -300,8 +295,11 @@ class Application(App):
             if eMin < 0:
                 eMin = 0
 
-            print(sMonth, "/", sDay, "/", sYear, " ", sHour, ":", sMin, ":", "00", ampm1)
-            print(eMonth, "/", eDay, "/", eYear, " ", eHour, ":", eMin, ":", "00", ampm2)
+            startinterval = (str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
+            endinterval = (str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
+
+            print(startinterval)
+            print(endinterval)
 
 
 
