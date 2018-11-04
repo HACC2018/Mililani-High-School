@@ -15,7 +15,29 @@ class Database:
 		#look through the csv and add each building a list
 		#in the same loop get the earliest timstamp and latest
 
+		#loads the names and column of each building on the csv
 		self.csv = csvFile
+		with open(self.csv) as file:
+			CSVDATA = csv.reader(file, delimiter=",")
+			rowNum = 0
+			for row in CSVDATA:
+				if rowNum == 0:
+					columnNum = 0
+					for column in row:
+						if columnNum != 0:
+							building = datatype.Building()
+							building.name = row[columnNum]
+							building.index = columnNum
+							Database.buildings.append(building)
+						columnNum += 1
+				else:
+					break
+				rowNum += 1
+
+		#verifies all buildings index and name on csv
+		for i in range(0, len(self.buildings)):
+			print(self.buildings[i].index, self.buildings[i].name)
+
 		Database.buildings = list(csv.reader(open(csvFile), delimiter=','))[0]#total buildings list
 		del Database.buildings[0]#delete time entry from building list
 		self.selectedBuildings = []#we will append building indexes to this
@@ -57,32 +79,33 @@ class Database:
 		#we will only refer to buildings by their index in the list, never by name
 
 	def ReadData(self):#read selected buildings and corresponding data points into classes
-		self.buildings = []
+		self.buildingsData = []
 		if self.selectedBuildings == []:
 			return []
 
 		for i in self.selectedBuildings:
 			building = datatype.Building()
-			self.buildings.append(building)
+			self.buildingsData.append(building)
 
 		with open(self.csv) as csvFile:
 
 			CSVDATA = csv.reader(csvFile, delimiter=",")
 			rowNum = 0
 			for row in CSVDATA:
-				if rowNum == 0:#set names of slected buildings if on first row
+				if rowNum == 0:#set names of selected buildings if on first row
 					for i in range(0,len(self.selectedBuildings)):
-						self.buildings[i].name = row[self.selectedBuildings[i]]#skips first column because it is empty
+						self.buildingsData[i].name = row[self.selectedBuildings[i]]#skips first column because it is empty
 				else:
 					columnNum = 0
 					for column in row:
 						if columnNum in self.selectedBuildings:#only add data if column is selected
 							dataPoint = datatype.DataPoint(row[0], row[columnNum])
-							self.buildings[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
+							self.buildingsData[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
 						columnNum += 1
-					print(row[0], " | ", self.buildings[0].name, self.buildings[0].dataPoints[rowNum - 1].kilowatts, " | ", self.buildings[1].name, self.buildings[1].dataPoints[rowNum - 1].kilowatts)
+					#print(row[0], " | ", self.buildingsData[0].name, self.buildingsData[0].dataPoints[rowNum - 1].kilowatts, " | ", 
+						#self.buildingsData[1].name, self.buildingsData[1].dataPoints[rowNum - 1].kilowatts
 				rowNum += 1
-		return self.buildings#return list of building classes
+		return self.buildingsData#return list of building classes
 
 
 
