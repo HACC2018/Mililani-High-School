@@ -11,29 +11,9 @@ class Database:
 	dataInterval = []
 	#time is handled in int(unix timestamp) form (make sure you conve rt to int)
 
-	def __init__(self, csvFile):
-		#look through the csv and add each building a list
-		#in the same loop get the earliest timstamp and latest
-
-		#loads the names and column of each building on the csv
+	def __init__(self, csvFile):	
 		self.csv = csvFile
-		with open(self.csv) as file:
-			CSVDATA = csv.reader(file, delimiter=",")
-			rowNum = 0
-			for row in CSVDATA:
-				if rowNum == 0:
-					columnNum = 0
-					for column in row:
-						if columnNum != 0:
-							building = datatype.Building()
-							building.name = row[columnNum]
-							building.index = columnNum
-							Database.buildings.append(building)
-						columnNum += 1
-				else:
-					break
-				rowNum += 1
-
+		self.BuildBuildings(self)
 		#verifies all buildings index and name on csv
 		for i in range(0, len(self.buildings)):
 			print(self.buildings[i].index, self.buildings[i].name)
@@ -51,7 +31,27 @@ class Database:
 		#print(Database.dataInterval[0])
 		#print(self.SetUnixToDate(Database.dataInterval[0]))
 
+	def BuildBuildings(self):
+		#look through the csv and add each building a list
+		#in the same loop get the earliest timstamp and latest
 
+		#loads the names and column of each building on the csv
+		with open(self.csv) as file:
+					CSVDATA = csv.reader(file, delimiter=",")
+					rowNum = 0
+					for row in CSVDATA:
+						if rowNum == 0:
+							columnNum = 0
+							for column in row:
+								if columnNum != 0:
+									building = datatype.Building()
+									building.name = row[columnNum]
+									building.index = columnNum
+									Database.buildings.append(building)
+								columnNum += 1
+						else:
+							break
+						rowNum += 1
 
 	def SetInterval(self, start, end):#input as datetime string
 		if (int(self.SetDateToUnix(start)) < Database.dataInterval[0]):
