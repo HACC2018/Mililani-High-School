@@ -30,7 +30,8 @@ class Graph:
 			print(self.ticks[x])
 			self.labels.append(database.SetUnixToDate((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0])))
 			print(self.labels[x])
-		plt.xticks(ticks=self.ticks, labels=self.labels, rotation=15)
+		plt.xticks(self.ticks, self.labels, rotation=15)
+		plt.grid(True, 'major', 'y', ls='--', lw=.5, c='k', alpha=.3)
 		plt.show()
  
 database = data.Database('database/csv/AnalyticsData_20181019174047.csv')#test csv
