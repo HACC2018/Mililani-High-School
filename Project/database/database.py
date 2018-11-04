@@ -1,4 +1,4 @@
-import datatype#imports our local file datatype.py
+import database.datatype as datatype #imports our local file datatype.py
 
 import calendar
 import csv
@@ -35,8 +35,8 @@ class Database:
 				rowNum += 1
 
 		#verifies all buildings index and name on csv
-		for i in range(0, len(self.buildings)):
-			print(self.buildings[i].index, self.buildings[i].name)
+		#for i in range(0, len(self.buildings)):
+		#	print(self.buildings[i].index, self.buildings[i].name)
 
 		Database.buildings = list(csv.reader(open(csvFile), delimiter=','))[0]#total buildings list
 		del Database.buildings[0]#delete time entry from building list
@@ -106,20 +106,19 @@ class Database:
 							break
 						columnNum += 1
 				rowNum += 1
-		for buildingNum in range(0, len(self.buildingsData)):
-			print(self.buildingsData[buildingNum].name)
-			for dataPointNum in range(0, len(self.buildingsData[buildingNum].dataPoints)):
-				print(self.buildingsData[buildingNum].dataPoints[dataPointNum].timestamp, " | ", self.buildingsData[buildingNum].dataPoints[dataPointNum].kilowatts)
+		#for buildingNum in range(0, len(self.buildingsData)):
+		#	print(self.buildingsData[buildingNum].name)
+		#	for dataPointNum in range(0, len(self.buildingsData[buildingNum].dataPoints)):
+		#		print(self.buildingsData[buildingNum].dataPoints[dataPointNum].timestamp, " | ", self.buildingsData[buildingNum].dataPoints[dataPointNum].kilowatts)
 		return self.buildingsData#return list of building classes
 
 
-
 #initializes an instance of database
-database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
+#database = Database('csv/AnalyticsData_20181019174047.csv')#test csv
 #building = Building(buildings[0])
 
-database.SetInterval(" 1/3/2018 10:30:00 AM", " 1/10/2018 10:30:00 AM")
-database.AddBuilding(3)
-database.AddBuilding(1)
+#database.SetInterval(" 1/3/2018 10:30:00 AM", " 1/10/2018 10:30:00 AM")
+#database.AddBuilding(3)
+#database.AddBuilding(1)
 
-database.ReadData()
+#database.ReadData()
