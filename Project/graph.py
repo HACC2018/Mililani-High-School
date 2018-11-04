@@ -32,6 +32,8 @@ class Graph:
 			print(self.labels[x])
 		plt.xticks(self.ticks, self.labels, rotation=15)
 		plt.grid(True, 'major', 'y', ls='--', lw=.5, c='k', alpha=.3)
+		plt.grid(True, 'major', 'x', ls='--', lw=.5, c='k', alpha=.3)
+
 		plt.show()
  
 database = data.Database('database/csv/AnalyticsData_20181019174047.csv')#test csv
