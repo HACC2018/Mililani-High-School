@@ -24,7 +24,8 @@ from kivy.graphics import Rectangle
 plt.plot([1,2,3,4,5,6])
 plt.ylabel('label')
 
-
+from graph import Graph
+import database.database as data
 
 #from database.database import Database
 Builder.load_string('''
@@ -76,6 +77,9 @@ class GraphSelect(BoxLayout):
     line = ObjectProperty(False)
     bar = ObjectProperty(False)
     pie = ObjectProperty(False)
+
+global database
+database = data.Database('database/csv/AnalyticsData_20181019174047.csv')
 
 buildings = ['1', '2', '3', '4', '5', '6', '7']
 totalnum = 0
@@ -298,8 +302,7 @@ class Application(App):
             startinterval = (str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
             endinterval = (str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
-            print(startinterval)
-            print(endinterval)
+            database.setInterval(startinterval, endinterval)
 
 
 
@@ -307,8 +310,8 @@ class Application(App):
         ok.bind(on_press=buttonClicked)
         graph_content.add_widget(ok)
 
-        for i, val in enumerate(buildings):
-            graph_content.add_widget(ToggleButton(text=val, size_hint=(0.2, 0.1), pos_hint={"left":0,"y":0.1*i}))
+        for i, val in enumerate(database.buildings):
+            graph_content.add_widget(ToggleButton(text=(database.buildings[i]), size_hint=(0.2, 0.1), pos_hint={"left":0,"y":0.1*i}))
 
 
 
