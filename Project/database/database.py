@@ -98,13 +98,18 @@ class Database:
 				else:
 					columnNum = 0
 					for column in row:
-						if columnNum in self.selectedBuildings:#only add data if column is selected
-							dataPoint = datatype.DataPoint(row[0], row[columnNum])
-							self.buildingsData[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
+						if self.SetDateToUnix(row[0]) >= self.unixInterval[0]:
+							if columnNum in self.selectedBuildings:#only add data if column is selected
+								dataPoint = datatype.DataPoint(row[0], row[columnNum])
+								self.buildingsData[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
+						if self.SetDateToUnix(row[0]) > self.unixInterval[1]:
+							break
 						columnNum += 1
-					#print(row[0], " | ", self.buildingsData[0].name, self.buildingsData[0].dataPoints[rowNum - 1].kilowatts, " | ", 
-						#self.buildingsData[1].name, self.buildingsData[1].dataPoints[rowNum - 1].kilowatts
 				rowNum += 1
+		for buildingNum in range(0, len(self.buildingsData)):
+			print(self.buildingsData[buildingNum].name)
+			for dataPointNum in range(0, len(self.buildingsData[buildingNum].dataPoints)):
+				print(self.buildingsData[buildingNum].dataPoints[dataPointNum].timestamp, " | ", self.buildingsData[buildingNum].dataPoints[dataPointNum].kilowatts)
 		return self.buildingsData#return list of building classes
 
 
