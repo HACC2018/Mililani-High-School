@@ -13,5 +13,7 @@ class Building:
 		self.dataPoints = []
 
 class CSV:
-	def __init__(self, path)
-		pass
+	def __init__(self, path, start, end)
+		self.path = "csv/" + path
+		self.interval = [start, end]
+		self.buildings = []
