@@ -24,7 +24,8 @@ from kivy.graphics import Rectangle
 plt.plot([1,2,3,4,5,6])
 plt.ylabel('label')
 
-
+from graph import Graph
+import database.database as data
 
 #from database.database import Database
 Builder.load_string('''
@@ -77,6 +78,9 @@ class GraphSelect(BoxLayout):
     bar = ObjectProperty(False)
     pie = ObjectProperty(False)
 
+global database
+database = data.Database('database/csv/AnalyticsData_20181019174047.csv')
+
 buildings = ['1', '2', '3', '4', '5', '6', '7']
 totalnum = 0
 for i in buildings:
@@ -86,7 +90,7 @@ class Application(App):
     def build(self):
 
         tb_panel = TabbedPanel()
-        tb_panel.do_default_tab = False
+        #tb_panel.do_default_tab = False
         #building_content= FloatLayout()
 
         #th_interval_head = TabbedPanelHeader(text="Interval")
@@ -237,7 +241,6 @@ class Application(App):
             eMin = int(endminute.text)
 
 
-
             if sMonth > 12:
                 sMonth = 12
             if sMonth < 0:
@@ -295,33 +298,33 @@ class Application(App):
             if eMin < 0:
                 eMin = 0
 
+
             startinterval = (str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
             endinterval = (str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
-            print(startinterval)
-            print(endinterval)
+            database.setInterval(startinterval, endinterval)
 
 
 
-        ok = Button(text="OK", size_hint=(.15, .1), pos_hint = {"x":0, "y":0.9})
+        ok = Button(text="Graph", size_hint=(.2, .2 ), pos_hint = {"x":0, "top":1})
         ok.bind(on_press=buttonClicked)
         graph_content.add_widget(ok)
 
-        for i, val in enumerate(buildings):
-            graph_content.add_widget(ToggleButton(text=val, size_hint=(0.2, 0.1), pos_hint={"left":0,"y":0.1*i}))
+        for i, val in enumerate(database.buildings):
+            graph_content.add_widget(ToggleButton(text=(database.buildings[i]), size_hint=(0.25, 0.05), pos_hint={"left":0,"y":0.05*i}))
 
 
 
-        th_lgraph_head = TabbedPanelHeader(text='Graphs')
-        th_lgraph_head.content = graph_content
+        #_lgraph_head = TabbedPanelHeader(text='Graphs')
+        #th_lgraph_head.content = graph_content
 
+        tb_panel.default_tab_content = graph_content
 
-
-        tb_panel.default_tab_text = "Home"
+        tb_panel.default_tab_text = "Graphs"
 
         #tb_panel.add_widget(th_interval_head)
         #tb_panel.add_widget(th_building_head)
-        tb_panel.add_widget(th_lgraph_head)
+        #tb_panel.add_widget(th_lgraph_head)
 
 
         return tb_panel
