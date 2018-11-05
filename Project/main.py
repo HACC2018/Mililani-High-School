@@ -317,16 +317,18 @@ class Application(App):
                 plt.ylabel('Kilowatts')
                 plt.legend()
 
-            tickNum = 8
+            tickNum = 7
             for x in range(0, tickNum):
                 ticks.append((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0]))
                 # print(self.ticks[x])#verifies the graph ticks
-                labels.append(database.SetUnixToDate((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0])))
+                label = database.SetUnixToLabel((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0]))
+                labels.append(label)
                 # print(self.labels[x])#verifies the graph tick labels
             ticks.append(database.unixInterval[1])
-            labels.append(database.SetUnixToDate(database.unixInterval[1]))
+            labels.append(database.SetUnixToLabel(database.unixInterval[1]))
             plt.xticks(ticks=ticks, labels=labels, rotation=15)
             plt.title("Dynamic Kilowatt/hr Graph")
+            plt.grid()
 
             graphwidget = FigureCanvasKivyAgg((plt.gcf()))
             graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
