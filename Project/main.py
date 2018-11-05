@@ -198,7 +198,7 @@ class Application(App):
         global ampm1
         ampm1 = "AM"#default
         global ampm2
-        ampm2 = "PM"#default
+        ampm2 = "AM"#default
         def ampmSET1(self):
             ampm1 = "AM"
 
@@ -261,10 +261,17 @@ class Application(App):
             if sHour < 0:
                 sHour = 0
 
-            if sMin > 60:
-                sMin = 60
+            if sMin > 59:
+                sMin = 59
             if sMin < 0:
                 sMin = 0
+
+
+
+            if eMonth > 12:
+                eMonth = 12
+            if eMonth < 0:
+                eMonth = 0
 
             if eMonth in [4, 6, 9, 11]:
                 if eDay > 30:
@@ -287,8 +294,8 @@ class Application(App):
             if eHour < 0:
                 eHour = 0
 
-            if eMin > 60:
-                eMin = 60
+            if eMin > 59:
+                eMin = 59
             if eMin < 0:
                 eMin = 0
 
