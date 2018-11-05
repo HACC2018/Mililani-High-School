@@ -298,6 +298,8 @@ class Application(App):
             database.SetInterval(startinterval, endinterval)
             database.ReadData()
 
+            plt.gcf().clear()
+
             # Initialize graph after prospects
             # Loop for grabbing buildings and data points
             ticks = []
