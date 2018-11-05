@@ -199,8 +199,6 @@ class Application(App):
         bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.925, "top": 0.85})
         graph_content.add_widget(bt6)
 
-
-        val = 0
         def ampmSET1(self):
             global ampm1
             ampm1 = "AM"
@@ -310,8 +308,22 @@ class Application(App):
         ok.bind(on_press=buttonClicked)
         graph_content.add_widget(ok)
 
+
+        buildingButtons = []
+        def createButton(name, index):
+            button = ToggleButton(text = name, size_hint = (0.25, 0.05), pos_hint = {"left":0, "y":0.05*index})
+            button.bind(on_press = lambda x: (database.ChangeBuilding(index)))
+            graph_content.add_widget(button)
         for i, val in enumerate(database.buildings):
-            graph_content.add_widget(ToggleButton(text=(database.buildings[i]), size_hint=(0.25, 0.05), pos_hint={"left":0,"y":0.05*i}))
+            #buildingButton = ToggleButton(text=(database.buildings[i]), size_hint=(0.25, 0.05), pos_hint={"left":0,"y":0.05*i}, group = i)
+            #buildingButtons.append(buildingButton)
+            #buildingButtons[i].bind(on_press=lambda x=i:(print(i)))
+            #graph_content.add_widget(buildingButtons[i])
+            #buildingButtons.append(buildingButton)
+            createButton(val,i)
+
+
+
 
 
 
