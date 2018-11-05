@@ -1,21 +1,11 @@
 class DataPoint:
 
-    def __init__(self, date, time, kilowatts):
-        self.date = date
-        self.time = time
+    def __init__(self, timestamp, kilowatts):#store timestamp as a unix timestamp
+        self.timestamp = timestamp
         self.kilowatts = kilowatts
 
 
 class Building:
 
-    def __init__(self, name, dataPoints):
-        self.name = name
-        self.dataPoints = dataPoints
-
-
-class Campus:
-
-    def __init__(self, name, buildings):
-        self.name = name
-        self.buildings = buildings
-
+    def __init__(self):
+        self.dataPoints = []
