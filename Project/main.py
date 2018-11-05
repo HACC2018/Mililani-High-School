@@ -195,20 +195,20 @@ class Application(App):
         bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.925, "top": 0.85})
         graph_content.add_widget(bt6)
 
+        global ampm1
+        ampm1 = "AM"#default
+        global ampm2
+        ampm2 = "PM"#default
         def ampmSET1(self):
-            global ampm1
             ampm1 = "AM"
 
         def ampmSET2(self):
-            global ampm1
             ampm1 = "PM"
 
         def ampmSET3(self):
-            global ampm2
             ampm2 = "AM"
 
         def ampmSET4(self):
-            global ampm2
             ampm2 = "PM"
 
 
@@ -291,6 +291,18 @@ class Application(App):
                 eMin = 60
             if eMin < 0:
                 eMin = 0
+
+
+            if sHour < 10:
+                sHour = "0" + str(sHour)
+            if sMin < 10:
+                sMin = "0" + str(sMin)
+
+            if eHour < 10:
+                eHour = "0" + str(eHour)
+            if eMin < 10:
+                eMin = "0" + str(eMin)
+
 
             startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
             endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
