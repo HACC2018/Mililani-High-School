@@ -34,6 +34,7 @@ class Graph:
 		plt.xticks(ticks=self.ticks, labels=self.labels, rotation=15)
 		plt.title("Dynamic Kilowatt/hr Graph")
 		fig = plt.gcf()
+
  
 #database = data.Database('database/csv/AnalyticsData_20181019174047.csv')#test csv
 #building = Building(buildings[0])
