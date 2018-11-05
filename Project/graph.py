@@ -7,7 +7,7 @@ import database.database as data
 
 class Graph:
 
-	def __init__(self, database):
+	def PlotGraph(self, database):
 		#Initialize graph after prospects 
 		#Loop for grabbing buildings and data points 
 		self.ticks = []
@@ -33,14 +33,14 @@ class Graph:
 		self.labels.append(database.SetUnixToDate(database.unixInterval[1]))
 		plt.xticks(ticks=self.ticks, labels=self.labels, rotation=15)
 		plt.title("Dynamic Kilowatt/hr Graph")
-		plt.show()
+		fig = plt.gcf()
  
 #database = data.Database('database/csv/AnalyticsData_20181019174047.csv')#test csv
 #building = Building(buildings[0])
 
 #database.SetInterval(" 1/3/2018 10:30:00 AM", " 2/3/2018 10:30:00 AM")
 #for i in range(5, len(database.buildings)):
-#	database.AddBuilding(i)
+#	database.ChangeBuilding(i)
 
 #database.ReadData()
 #graph = Graph(database)
