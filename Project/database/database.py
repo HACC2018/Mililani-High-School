@@ -70,6 +70,10 @@ class Database:
 		return int(utc.timestamp()) - 36000#unix is UTC time which is 10 hours ahead (36000 seconds)
 
 
+	def SetUnixToLabel(self, unix):
+		return datetime.datetime.utcfromtimestamp(unix).strftime('%m/%d/%y %I:%M %p')
+
+
 	def ChangeBuilding(self, selectedBuilding):#send the building by index of buildings list
 		if selectedBuilding not in self.selectedBuildings:
 			self.selectedBuildings.append(selectedBuilding)

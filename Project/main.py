@@ -195,20 +195,20 @@ class Application(App):
         bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.925, "top": 0.85})
         graph_content.add_widget(bt6)
 
+        global ampm1
+        ampm1 = "AM"#default
+        global ampm2
+        ampm2 = "PM"#default
         def ampmSET1(self):
-            global ampm1
             ampm1 = "AM"
 
         def ampmSET2(self):
-            global ampm1
             ampm1 = "PM"
 
         def ampmSET3(self):
-            global ampm2
             ampm2 = "AM"
 
         def ampmSET4(self):
-            global ampm2
             ampm2 = "PM"
 
 
@@ -292,11 +292,25 @@ class Application(App):
             if eMin < 0:
                 eMin = 0
 
+
+            if sHour < 10:
+                sHour = "0" + str(sHour)
+            if sMin < 10:
+                sMin = "0" + str(sMin)
+
+            if eHour < 10:
+                eHour = "0" + str(eHour)
+            if eMin < 10:
+                eMin = "0" + str(eMin)
+
+
             startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
             endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
             database.SetInterval(startinterval, endinterval)
             database.ReadData()
+
+            plt.gcf().clear()
 
             # Initialize graph after prospects
             # Loop for grabbing buildings and data points
@@ -315,16 +329,18 @@ class Application(App):
                 plt.ylabel('Kilowatts')
                 plt.legend()
 
-            tickNum = 8
+            tickNum = 7
             for x in range(0, tickNum):
                 ticks.append((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0]))
                 # print(self.ticks[x])#verifies the graph ticks
-                labels.append(database.SetUnixToDate((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0])))
+                label = database.SetUnixToLabel((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0]))
+                labels.append(label)
                 # print(self.labels[x])#verifies the graph tick labels
             ticks.append(database.unixInterval[1])
-            labels.append(database.SetUnixToDate(database.unixInterval[1]))
+            labels.append(database.SetUnixToLabel(database.unixInterval[1]))
             plt.xticks(ticks=ticks, labels=labels, rotation=15)
             plt.title("Dynamic Kilowatt/hr Graph")
+            plt.grid()
 
             graphwidget = FigureCanvasKivyAgg((plt.gcf()))
             graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
