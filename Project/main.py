@@ -19,12 +19,12 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
+
 from kivy.uix.togglebutton import ToggleButton
 from kivy.graphics import Rectangle
-plt.plot([1,2,3,4,5,6])
-plt.ylabel('label')
 
-from graph import Graph
+
+import graph
 import database.database as data
 
 #from database.database import Database
@@ -72,6 +72,7 @@ Builder.load_string('''
 ''')
 
 
+lineGraph = graph.Graph()
 
 class GraphSelect(BoxLayout):
     line = ObjectProperty(False)
@@ -108,7 +109,6 @@ class Application(App):
 
 
         graph_content = FloatLayout()
-        graph_content.add_widget(FigureCanvasKivyAgg(plt.gcf(), size_hint = (0.8,0.8), pos_hint = {"right":1,"y":0}))
 
         StartDate = Label(text='Start Date:', size_hint=(0.1, 0.1), pos_hint = {"x":0.2, "top": 1})
         graph_content.add_widget(StartDate)
@@ -297,10 +297,24 @@ class Application(App):
                 eMin = 0
 
 
-            startinterval = (str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
-            endinterval = (str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
+            #startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
+            #endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
-            database.setInterval(startinterval, endinterval)
+            database.SetInterval(" 1/2/2018 10:30:00 AM", " 1/2/2018 10:30:00 PM")
+            database.selectedBuildings = [1]
+            database.ReadData()
+            lineGraph.PlotGraph(database)
+
+            graphwidget = FigureCanvasKivyAgg((graph.plt.gcf()))
+            graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
+            graph_area.add_widget(graphwidget)
+            graph_content.add_widget(graph_area)
+
+
+
+
+
+
 
 
 
@@ -311,7 +325,7 @@ class Application(App):
 
         buildingButtons = []
         def createButton(name, index):
-            button = ToggleButton(text = name, size_hint = (0.25, 0.05), pos_hint = {"left":0, "y":0.05*index})
+            button = ToggleButton(text = name, size_hint = (0.25, 0.05), pos_hint = {"right":1, "y":0.05*index})
             button.bind(on_press = lambda x: (database.ChangeBuilding(index)))
             graph_content.add_widget(button)
         for i, val in enumerate(database.buildings):

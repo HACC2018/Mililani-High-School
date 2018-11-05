@@ -76,7 +76,6 @@ class Database:
 		elif selectedBuilding in self.selectedBuildings:
 			self.selectedBuildings.remove(selectedBuilding)
 
-		print(self.selectedBuildings)
 
 		#we will only refer to buildings by their index in the list, never by name
 
