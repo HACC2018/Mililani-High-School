@@ -23,8 +23,6 @@ import matplotlib.pyplot as plt
 from kivy.uix.togglebutton import ToggleButton
 from kivy.graphics import Rectangle
 
-
-import graph
 import database.database as data
 
 #from database.database import Database
@@ -71,8 +69,6 @@ Builder.load_string('''
 
 ''')
 
-
-lineGraph = graph.Graph()
 
 class GraphSelect(BoxLayout):
     line = ObjectProperty(False)
@@ -296,16 +292,41 @@ class Application(App):
             if eMin < 0:
                 eMin = 0
 
+            startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
+            endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
-            #startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
-            #endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
-
-            database.SetInterval(" 1/2/2018 10:30:00 AM", " 1/2/2018 10:30:00 PM")
-            database.selectedBuildings = [1]
+            database.SetInterval(startinterval, endinterval)
             database.ReadData()
-            lineGraph.PlotGraph(database)
 
-            graphwidget = FigureCanvasKivyAgg((graph.plt.gcf()))
+            # Initialize graph after prospects
+            # Loop for grabbing buildings and data points
+            ticks = []
+            labels = []
+            for buildingNum in range(0, len(database.buildingsData)):
+                timestamps = []
+                kilowatts = []
+                for dataPoint in range(0, len(database.buildingsData[buildingNum].dataPoints)):
+                    timestamps.append(
+                        database.SetDateToUnix(database.buildingsData[buildingNum].dataPoints[dataPoint].timestamp))
+                    kilowatts.append(
+                        float(database.buildingsData[buildingNum].dataPoints[dataPoint].kilowatts))
+                plt.plot(timestamps, kilowatts, label=str(database.buildingsData[buildingNum].name))
+                plt.xlabel('Timestamp')
+                plt.ylabel('Kilowatts')
+                plt.legend()
+
+            tickNum = 8
+            for x in range(0, tickNum):
+                ticks.append((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0]))
+                # print(self.ticks[x])#verifies the graph ticks
+                labels.append(database.SetUnixToDate((x * ((database.unixInterval[1] - database.unixInterval[0]) / tickNum) + database.unixInterval[0])))
+                # print(self.labels[x])#verifies the graph tick labels
+            ticks.append(database.unixInterval[1])
+            labels.append(database.SetUnixToDate(database.unixInterval[1]))
+            plt.xticks(ticks=ticks, labels=labels, rotation=15)
+            plt.title("Dynamic Kilowatt/hr Graph")
+
+            graphwidget = FigureCanvasKivyAgg((plt.gcf()))
             graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
             graph_area.add_widget(graphwidget)
             graph_content.add_widget(graph_area)
@@ -326,14 +347,9 @@ class Application(App):
         buildingButtons = []
         def createButton(name, index):
             button = ToggleButton(text = name, size_hint = (0.25, 0.05), pos_hint = {"right":1, "y":0.05*index})
-            button.bind(on_press = lambda x: (database.ChangeBuilding(index)))
+            button.bind(on_press = lambda x: (database.ChangeBuilding(index + 1)))
             graph_content.add_widget(button)
         for i, val in enumerate(database.buildings):
-            #buildingButton = ToggleButton(text=(database.buildings[i]), size_hint=(0.25, 0.05), pos_hint={"left":0,"y":0.05*i}, group = i)
-            #buildingButtons.append(buildingButton)
-            #buildingButtons[i].bind(on_press=lambda x=i:(print(i)))
-            #graph_content.add_widget(buildingButtons[i])
-            #buildingButtons.append(buildingButton)
             createButton(val,i)
 
 

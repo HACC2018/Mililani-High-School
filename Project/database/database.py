@@ -35,8 +35,8 @@ class Database:
 				rowNum += 1
 
 		#verifies all buildings index and name on csv
-		for i in range(0, len(self.buildings)):
-			print(self.buildings[i].index, self.buildings[i].name)
+		#for i in range(0, len(self.buildings)):
+		#	print(self.buildings[i].index, self.buildings[i].name)
 
 		Database.buildings = list(csv.reader(open(csvFile), delimiter=','))[0]#total buildings list
 		del Database.buildings[0]#delete time entry from building list
