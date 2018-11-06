@@ -15,7 +15,6 @@ class Database:
 		#look through the csv and add each building a list
 		#in the same loop get the earliest timstamp and latest
 
-		#loads the names and column of each building on the csv
 		self.csv = csvFile
 		with open(self.csv) as file:
 			CSVDATA = csv.reader(file, delimiter=",")
@@ -85,6 +84,7 @@ class Database:
 
 	def ReadData(self):#read selected buildings and corresponding data points into classes
 		self.buildingsData = []
+		hasData = False
 		if self.selectedBuildings == []:
 			return []
 
@@ -106,11 +106,18 @@ class Database:
 						if self.SetDateToUnix(row[0]) >= self.unixInterval[0]:
 							if columnNum in self.selectedBuildings:#only add data if column is selected
 								dataPoint = datatype.DataPoint(row[0], row[columnNum])
+								hasData = True
 								self.buildingsData[self.selectedBuildings.index(columnNum)].dataPoints.append(dataPoint)#add data points to building classes
 						if self.SetDateToUnix(row[0]) > self.unixInterval[1]:
 							break
 						columnNum += 1
 				rowNum += 1
+
+		if hasData == False:
+			return False
+		elif hasData == True:
+			return True
+
 		#for buildingNum in range(0, len(self.buildingsData)):
 		#	print(self.buildingsData[buildingNum].name)
 		#	for dataPointNum in range(0, len(self.buildingsData[buildingNum].dataPoints)):
