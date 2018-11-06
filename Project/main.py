@@ -253,8 +253,8 @@ class Application(App):
 
             if sYear > 2020:
                 sYear = 2020
-            if sYear < 0:
-                sYear = 0
+            if sYear < 2000:
+                sYear = 2000
 
             if sHour > 12:
                 sHour = 12
@@ -286,8 +286,8 @@ class Application(App):
 
             if eYear > 2020:
                 eYear = 2020
-            if eYear < 0:
-                eYear = 0
+            if eYear < 2000:
+                eYear = 2000
 
             if eHour > 12:
                 eHour = 12
