@@ -1,7 +1,7 @@
 from kivy.config import Config
 Config.set('graphics', 'resizable', '0')
-Config.set('graphics','width','1920')
-Config.set('graphics', 'height', '1080')
+Config.set('graphics','width','1280')
+Config.set('graphics', 'height', '720')
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -117,9 +117,6 @@ class Application(App):
         slashDate1 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.35, "top":1})
         graph_content.add_widget(slashDate1)
 
-        slashDate4 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.35, "top": 0.9})
-        graph_content.add_widget(slashDate4)
-
         startday = TextInput(multiline=False, hint_text="Day (DD)",pos_hint = {"x":1, "top":0.5}, input_filter='float')
         start_day_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.31, "top":1})
         start_day_area.add_widget(startday)
@@ -127,9 +124,6 @@ class Application(App):
 
         slashDate2 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.47, "top":1})
         graph_content.add_widget(slashDate2)
-
-        slashDate3 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.47, "top": 0.9})
-        graph_content.add_widget(slashDate3)
 
         startyear = TextInput(multiline=False, hint_text="Year (YYYY)", pos_hint = {"x":1, "top":0.5}, input_filter='float')
         start_year_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.43, "top":1})
@@ -218,7 +212,6 @@ class Application(App):
             ampm2 = "PM"
 
 
-
         bt3.bind(on_press = ampmSET1)
         bt4.bind(on_press = ampmSET2)
         bt5.bind(on_press = ampmSET3)
@@ -226,104 +219,121 @@ class Application(App):
 
         def buttonClicked(self):
 
-            sMonth = int(startmonth.text)
-            sDay = int(startday.text)
-            sYear = int(startyear.text)
+            graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
 
-            sHour = int(starthour.text)
-            sMin = int(startminute.text)
+            try:
+                sMonth = int(startmonth.text)
+                sDay = int(startday.text)
+                sYear = int(startyear.text)
 
-            eMonth = int(endmonth.text)
-            eDay = int(endday.text)
-            eYear = int(endyear.text)
+                sHour = int(starthour.text)
+                sMin = int(startminute.text)
 
-            eHour = int(endhour.text)
-            eMin = int(endminute.text)
+                eMonth = int(endmonth.text)
+                eDay = int(endday.text)
+                eYear = int(endyear.text)
 
+                eHour = int(endhour.text)
+                eMin = int(endminute.text)
 
-            if sMonth > 12:
-                sMonth = 12
-            if sMonth < 0:
-                sMonth = 0
-
-            if sMonth in [4, 6, 9, 11]:
-                if sDay > 30:
-                    sDay = 30
-            elif sMonth in [1, 3, 5, 7, 8, 10, 12]:
-                if sDay > 31:
-                    sDay = 31
-            elif sMonth == 2:
-                sDay = 28
-            if sDay < 0:
-                sDay = 0
-
-            if sYear > 2020:
-                sYear = 2020
-            if sYear < 2000:
-                sYear = 2000
-
-            if sHour > 12:
-                sHour = 12
-            if sHour < 0:
-                sHour = 0
-
-            if sMin > 59:
-                sMin = 59
-            if sMin < 0:
-                sMin = 0
+                if database.ReadData() == False:
+                    graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
+                    graph_content.add_widget(graph_area)
+                    return 0
 
 
+                if sMonth > 12:
+                    sMonth = 12
+                if sMonth < 0:
+                    sMonth = 0
 
-            if eMonth > 12:
-                eMonth = 12
-            if eMonth < 0:
-                eMonth = 0
+                if sMonth in [4, 6, 9, 11]:
+                    if sDay > 30:
+                        sDay = 30
+                elif sMonth in [1, 3, 5, 7, 8, 10, 12]:
+                    if sDay > 31:
+                        sDay = 31
+                elif sMonth == 2:
+                    sDay = 28
+                if sDay < 0:
+                    sDay = 0
 
-            if eMonth in [4, 6, 9, 11]:
-                if eDay > 30:
-                    eDay = 30
-            elif eMonth in [1, 3, 5, 7, 8, 10, 12]:
-                if eDay > 31:
-                    eDay = 31
-            elif eDay == 2:
-                eDay = 28
-            if eDay < 0:
-                eDay = 0
+                if sYear > 2020:
+                    sYear = 2020
+                if sYear < 2000:
+                    sYear = 2000
 
-            if eYear > 2020:
-                eYear = 2020
-            if eYear < 2000:
-                eYear = 2000
+                if sHour > 12:
+                    sHour = 12
+                if sHour < 0:
+                    sHour = 0
 
-            if eHour > 12:
-                eHour = 12
-            if eHour < 0:
-                eHour = 0
-
-            if eMin > 59:
-                eMin = 59
-            if eMin < 0:
-                eMin = 0
-
-
-            if sHour < 10:
-                sHour = "0" + str(sHour)
-            if sMin < 10:
-                sMin = "0" + str(sMin)
-
-            if eHour < 10:
-                eHour = "0" + str(eHour)
-            if eMin < 10:
-                eMin = "0" + str(eMin)
+                if sMin > 59:
+                    sMin = 59
+                if sMin < 0:
+                    sMin = 0
 
 
-            startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
-            endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
 
-            database.SetInterval(startinterval, endinterval)
-            database.ReadData()
+                if eMonth > 12:
+                    eMonth = 12
+                if eMonth < 0:
+                    eMonth = 0
+
+                if eMonth in [4, 6, 9, 11]:
+                    if eDay > 30:
+                        eDay = 30
+                elif eMonth in [1, 3, 5, 7, 8, 10, 12]:
+                    if eDay > 31:
+                        eDay = 31
+                elif eDay == 2:
+                    eDay = 28
+                if eDay < 0:
+                    eDay = 0
+
+                if eYear > 2020:
+                    eYear = 2020
+                if eYear < 2000:
+                    eYear = 2000
+
+                if eHour > 12:
+                    eHour = 12
+                if eHour < 0:
+                    eHour = 0
+
+                if eMin > 59:
+                    eMin = 59
+                if eMin < 0:
+                    eMin = 0
+
+
+                if sHour < 10:
+                    sHour = "0" + str(sHour)
+                if sMin < 10:
+                    sMin = "0" + str(sMin)
+
+                if eHour < 10:
+                    eHour = "0" + str(eHour)
+                if eMin < 10:
+                    eMin = "0" + str(eMin)
+
+
+                startinterval = (" " + str(sMonth) + "/" + str(sDay) + "/" + str(sYear) + " " + str(sHour) + ":" + str(sMin) + ":" + "00 " + ampm1)
+                endinterval = (" " + str(eMonth) + "/" + str(eDay) + "/" + str(eYear) + " " + str(eHour) + ":" + str(eMin) + ":" + "00 " + ampm2)
+
+                database.SetInterval(startinterval, endinterval)
+            except:
+                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
+                graph_content.add_widget(graph_area)
+                return 0
 
             plt.gcf().clear()
+
+            if database.ReadData() == False or len(database.selectedBuildings) == 0:
+                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
+                graph_content.add_widget(graph_area)
+                return 0
+            #if database has no data return a graph error
 
             # Initialize graph after prospects
             # Loop for grabbing buildings and data points
@@ -356,19 +366,13 @@ class Application(App):
             plt.grid()
 
             graphwidget = FigureCanvasKivyAgg((plt.gcf()))
-            graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
             graph_area.add_widget(graphwidget)
             graph_content.add_widget(graph_area)
 
 
 
 
-
-
-
-
-
-        ok = Button(text="Graph", size_hint=(.15, .15 ), pos_hint = {"x":0.025, "top":0.975})
+        ok = Button(text="Graph", size_hint=(.2, .2 ), pos_hint = {"x":0, "top":1})
         ok.bind(on_press=buttonClicked)
         graph_content.add_widget(ok)
 
