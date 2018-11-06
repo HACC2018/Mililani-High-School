@@ -221,6 +221,8 @@ class Application(App):
 
             graph_area = FloatLayout(size_hint=(0.75,0.8), pos_hint = {"left": 0, "top":0.9})
 
+            plt.gcf().clear()
+
             try:
                 sMonth = int(startmonth.text)
                 sDay = int(startday.text)
@@ -235,11 +237,6 @@ class Application(App):
 
                 eHour = int(endhour.text)
                 eMin = int(endminute.text)
-
-                if database.ReadData() == False:
-                    graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
-                    graph_content.add_widget(graph_area)
-                    return 0
 
 
                 if sMonth > 12:
@@ -323,14 +320,14 @@ class Application(App):
 
                 database.SetInterval(startinterval, endinterval)
             except:
-                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
+                plt.gcf().clear()
+                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}, color = (1,0,0,1)))
                 graph_content.add_widget(graph_area)
                 return 0
 
-            plt.gcf().clear()
-
             if database.ReadData() == False or len(database.selectedBuildings) == 0:
-                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}))
+                plt.gcf().clear()
+                graph_area.add_widget(Label(text = "No data for given parameters", font_size = "30dp", pos_hint = {"x":0,"y":0.1}, color = (1,0,0,1)))
                 graph_content.add_widget(graph_area)
                 return 0
             #if database has no data return a graph error

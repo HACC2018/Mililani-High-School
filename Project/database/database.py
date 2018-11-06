@@ -15,7 +15,6 @@ class Database:
 		#look through the csv and add each building a list
 		#in the same loop get the earliest timstamp and latest
 
-		#loads the names and column of each building on the csv
 		self.csv = csvFile
 		with open(self.csv) as file:
 			CSVDATA = csv.reader(file, delimiter=",")
@@ -113,11 +112,12 @@ class Database:
 							break
 						columnNum += 1
 				rowNum += 1
+
 		if hasData == False:
-			print("Working")
 			return False
 		elif hasData == True:
 			return True
+
 		#for buildingNum in range(0, len(self.buildingsData)):
 		#	print(self.buildingsData[buildingNum].name)
 		#	for dataPointNum in range(0, len(self.buildingsData[buildingNum].dataPoints)):
