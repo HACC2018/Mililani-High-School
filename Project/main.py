@@ -1,7 +1,7 @@
 from kivy.config import Config
 Config.set('graphics', 'resizable', '0')
-Config.set('graphics','width','1280')
-Config.set('graphics', 'height', '700')
+Config.set('graphics','width','1920')
+Config.set('graphics', 'height', '1080')
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -117,6 +117,9 @@ class Application(App):
         slashDate1 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.35, "top":1})
         graph_content.add_widget(slashDate1)
 
+        slashDate4 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.35, "top": 0.9})
+        graph_content.add_widget(slashDate4)
+
         startday = TextInput(multiline=False, hint_text="Day (DD)",pos_hint = {"x":1, "top":0.5}, input_filter='float')
         start_day_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.31, "top":1})
         start_day_area.add_widget(startday)
@@ -124,6 +127,9 @@ class Application(App):
 
         slashDate2 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.47, "top":1})
         graph_content.add_widget(slashDate2)
+
+        slashDate3 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.47, "top": 0.9})
+        graph_content.add_widget(slashDate3)
 
         startyear = TextInput(multiline=False, hint_text="Year (YYYY)", pos_hint = {"x":1, "top":0.5}, input_filter='float')
         start_year_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.43, "top":1})
@@ -362,7 +368,7 @@ class Application(App):
 
 
 
-        ok = Button(text="Graph", size_hint=(.2, .2 ), pos_hint = {"x":0, "top":1})
+        ok = Button(text="Graph", size_hint=(.15, .15 ), pos_hint = {"x":0.025, "top":0.975})
         ok.bind(on_press=buttonClicked)
         graph_content.add_widget(ok)
 
