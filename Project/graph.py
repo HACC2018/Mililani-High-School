@@ -1,5 +1,5 @@
 #import matplotlib here
-
+'''
 import matplotlib.pyplot as plt
 import database.database as data
 
@@ -46,3 +46,4 @@ for i in range(5, len(database.buildings)):
 database.ReadData()
 graph = Graph(database)
 
+'''
