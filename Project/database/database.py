@@ -44,7 +44,7 @@ class Database:
 		#index of those builings we want to look at. This makes it so
 		#that we only need to store the int of its index vs the entire instance
 		csvRows = len(list(csv.reader(open(self.csv), delimiter=',')))#number of rows in csv starting at 1
-		Database.dataInterval = [int(self.SetDateToUnix(list(csv.reader(open(self.csv)), delimiter=','))[1][0])),#time at begining of csv
+		Database.dataInterval = [int(self.SetDateToUnix(list(csv.reader(open(self.csv)), delimiter=','))[1][0]),#time at begining of csv
 								 int(self.SetDateToUnix(list(csv.reader(open(self.csv), delimiter=','))[csvRows - 1][0]))]
 		#add time at end of csv (subtract 1 from rows)
 		#print(Database.dataInterval[0])
