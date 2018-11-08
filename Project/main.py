@@ -1,5 +1,5 @@
 from kivy.config import Config
-Config.set('graphics', 'resizable', '0')
+Config.set('graphics', 'resizable', '1')
 Config.set('graphics','width','1280')
 Config.set('graphics', 'height', '720')
 from kivy.app import App
@@ -69,14 +69,33 @@ Builder.load_string('''
 
 ''')
 
+class GraphSettings:
 
-class GraphSelect(BoxLayout):
-    line = ObjectProperty(False)
-    bar = ObjectProperty(False)
-    pie = ObjectProperty(False)
+    def __init__(self):
+        self.midnight = False
+        self.noon = False
+
+    def ToggleMidnight(self):
+        if self.midnight == True:
+            self.midnight = False
+
+        elif self.midnight == False:
+            self.midnight = True
+
+    def ToggleNoon(self):
+        if self.noon == True:
+            self.noon = False
+
+        elif self.noon == False:
+            self.noon = True
+
+
+global graphSettings
+graphSettings = GraphSettings()
+
 
 global database
-database = data.Database('database/csv/AnalyticsData_20181019174047.csv')
+database = data.Database()#no csv needed, it automatically finds csvs.
 
 buildings = ['1', '2', '3', '4', '5', '6', '7']
 totalnum = 0
@@ -106,94 +125,107 @@ class Application(App):
 
         graph_content = FloatLayout()
 
-        StartDate = Label(text='Start Date:', size_hint=(0.1, 0.1), pos_hint = {"x":0.2, "top": 1})
+        StartDate = Label(text='Start Date:', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint = {"x":0.21, "top": 1})
         graph_content.add_widget(StartDate)
 
-        startmonth = TextInput(text='', multiline=False, pos_hint = {"x":1, "top":0.5}, hint_text="Month (MM)", input_filter='int')
-        start_month_area= FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.19, "top":1})
+        startmonth = TextInput(text='', font_size=('15dp'), multiline=False, pos_hint = {"x":1, "top":0.5}, hint_text="MM", input_filter='int')
+        start_month_area= FloatLayout(size_hint = (0.03,0.04), pos_hint = {"x":0.27, "top":0.99})
         start_month_area.add_widget(startmonth)
         graph_content.add_widget(start_month_area)
 
-        slashDate1 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.35, "top":1})
+        slashDate1 = Label(text='/', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint = {"x":0.29, "top":1})
         graph_content.add_widget(slashDate1)
 
-        startday = TextInput(multiline=False, hint_text="Day (DD)",pos_hint = {"x":1, "top":0.5}, input_filter='float')
-        start_day_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.31, "top":1})
+        startday = TextInput(multiline=False, font_size=('15dp'), hint_text="DD",pos_hint = {"x":1, "top":0.5}, input_filter='float')
+        start_day_area = FloatLayout(size_hint = (0.03,0.04), pos_hint = {"x":0.32, "top":.99})
         start_day_area.add_widget(startday)
         graph_content.add_widget(start_day_area)
 
-        slashDate2 = Label(text='/', size_hint=(0.1, 0.1), pos_hint = {"x":0.47, "top":1})
+        slashDate2 = Label(text='/', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint = {"x":0.34, "top":1})
         graph_content.add_widget(slashDate2)
 
-        startyear = TextInput(multiline=False, hint_text="Year (YYYY)", pos_hint = {"x":1, "top":0.5}, input_filter='float')
-        start_year_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.43, "top":1})
+        startyear = TextInput(multiline=False, font_size=('15dp'), hint_text="YYYY", pos_hint = {"x":1, "top":0.45}, input_filter='float')
+        start_year_area = FloatLayout(size_hint = (0.04,0.04), pos_hint = {"x":0.36, "top":.992})
         start_year_area.add_widget(startyear)
         graph_content.add_widget(start_year_area)
 
-        starthour = TextInput(multiline=False, hint_text="Hour (HH)", pos_hint = {"x":1, "top":0.5}, input_filter='float')
-        start_hour_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.6, "top":1})
+        starthour = TextInput(multiline=False, font_size=('15dp'), hint_text="Hr", pos_hint = {"x":1, "top":0.5}, input_filter='float')
+        start_hour_area = FloatLayout(size_hint = (0.03,0.04), pos_hint = {"x":0.44, "top":.99})
         start_hour_area.add_widget(starthour)
         graph_content.add_widget(start_hour_area)
 
-        colonDate1 = Label(text=':', size_hint=(0.1, 0.1), pos_hint = {"x":0.76, "top":1})
+        colonDate1 = Label(text=':', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint = {"x":0.46, "top":1})
         graph_content.add_widget(colonDate1)
 
-        startminute = TextInput(multiline=False, hint_text="Minutes (MM)",pos_hint = {"x":1, "top":0.5} , input_filter='float')
-        start_minute_area = FloatLayout(size_hint = (0.1,0.05), pos_hint = {"x":0.72, "top":1})
+        startminute = TextInput(multiline=False, font_size=('15dp'), hint_text="Min",pos_hint = {"x":1, "top":0.5} , input_filter='float')
+        start_minute_area = FloatLayout(size_hint = (0.03,0.04), pos_hint = {"x":0.49, "top":.99})
         start_minute_area.add_widget(startminute)
         graph_content.add_widget(start_minute_area)
 
-        bt3 = ToggleButton(text='AM', group='time1', size_hint=(0.05, 0.025), pos_hint = {"x":0.925, "top":0.974})
+        bt3 = ToggleButton(text='AM', group='time1', size_hint=(0.05, 0.025), pos_hint = {"x":0.57, "top":0.974})
         graph_content.add_widget(bt3)
-        bt4 = ToggleButton(text='PM', group='time1', size_hint=(0.05, 0.025), pos_hint = {"x":0.925, "top":0.95})
+        bt4 = ToggleButton(text='PM', group='time1', size_hint=(0.05, 0.025), pos_hint = {"x":0.57, "top":0.95})
         graph_content.add_widget(bt4)
 
 
 
 
-        EndDate = Label(text='End Date:', size_hint=(0.1, 0.1), pos_hint={"x": 0.2, "top": 0.9})
+        EndDate = Label(text='End Date:', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint={"x": 0.21, "top": 0.9})
         graph_content.add_widget(EndDate)
 
-        endmonth = TextInput(text='', multiline=False, pos_hint={"x": 1, "top": 0.5}, hint_text="Month (MM)",
+        endmonth = TextInput(text='', font_size=('15dp'), multiline=False, pos_hint={"x": 1, "top": 0.5}, hint_text="MM",
                                input_filter='int')
-        end_month_area = FloatLayout(size_hint=(0.1, 0.05), pos_hint={"x": 0.19, "top": 0.9})
+        end_month_area = FloatLayout(size_hint=(0.03, 0.04), pos_hint={"x": 0.27, "top": 0.89})
         end_month_area.add_widget(endmonth)
         graph_content.add_widget(end_month_area)
 
-        slashDate3 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.35, "top": 1})
+        slashDate3 = Label(text='/', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint={"x": 0.29, "top": .9})
         graph_content.add_widget(slashDate3)
 
-        endday = TextInput(multiline=False, hint_text="Day (DD)", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
-        end_day_area = FloatLayout(size_hint=(0.1, 0.05), pos_hint={"x": 0.31, "top": 0.9})
+        endday = TextInput(multiline=False, font_size=('15dp'), hint_text="DD", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
+        end_day_area = FloatLayout(size_hint=(0.03, 0.04), pos_hint={"x": 0.32, "top": 0.89})
         end_day_area.add_widget(endday)
         graph_content.add_widget(end_day_area)
 
-        slashDate4 = Label(text='/', size_hint=(0.1, 0.1), pos_hint={"x": 0.47, "top": 1})
+        slashDate4 = Label(text='/', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint={"x": 0.34, "top": .9})
         graph_content.add_widget(slashDate4)
 
-        endyear = TextInput(multiline=False, hint_text="Year (YYYY)", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
-        end_year_area = FloatLayout(size_hint=(0.1, 0.05), pos_hint={"x": 0.43, "top": 0.9})
+        endyear = TextInput(multiline=False, font_size=('15dp'), hint_text="YYYY", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
+        end_year_area = FloatLayout(size_hint=(0.04, 0.04), pos_hint={"x": 0.36, "top": 0.89})
         end_year_area.add_widget(endyear)
         graph_content.add_widget(end_year_area)
 
-        endhour = TextInput(multiline=False, hint_text="Hour (HH)", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
-        end_hour_area = FloatLayout(size_hint=(0.1, 0.05), pos_hint={"x": 0.6, "top": 0.9})
+        endhour = TextInput(multiline=False, font_size=('15dp'), hint_text="Hr", pos_hint={"x": 1, "top": 0.5}, input_filter='float')
+        end_hour_area = FloatLayout(size_hint=(0.03, 0.04), pos_hint={"x": 0.44, "top": 0.89})
         end_hour_area.add_widget(endhour)
         graph_content.add_widget(end_hour_area)
 
-        colonDate2 = Label(text=':', size_hint=(0.1, 0.1), pos_hint={"x": 0.76, "top": 0.9})
+        colonDate2 = Label(text=':', font_size=('19dp'), size_hint=(0.1, 0.1), pos_hint={"x": 0.46, "top": 0.9})
         graph_content.add_widget(colonDate2)
 
-        endminute = TextInput(multiline=False, hint_text="Minutes (MM)", pos_hint={"x": 1, "top": 0.5},
+        endminute = TextInput(multiline=False, font_size=('15dp'), hint_text="Min", pos_hint={"x": 1, "top": 0.5},
                                 input_filter='float')
-        end_minute_area = FloatLayout(size_hint=(0.1, 0.05), pos_hint={"x": 0.72, "top": 0.9})
+        end_minute_area = FloatLayout(size_hint=(0.03, 0.04), pos_hint={"x": 0.49, "top": 0.89})
         end_minute_area.add_widget(endminute)
         graph_content.add_widget(end_minute_area)
 
-        bt5 = ToggleButton(text='AM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.925, "top": 0.874})
+        bt5 = ToggleButton(text='AM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.57, "top": 0.874})
         graph_content.add_widget(bt5)
-        bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.925, "top": 0.85})
+        bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.57, "top": 0.85})
         graph_content.add_widget(bt6)
+
+
+
+        #graph settings
+        midnightButton = ToggleButton(text = 'Midnight Markers', size_hint = (0.25, 0.05), pos_hint = {"right":1, "top":1})
+        midnightButton.bind(on_press = lambda x: (graphSettings.ToggleMidnight()))
+        graph_content.add_widget(midnightButton)
+
+        noonButton = ToggleButton(text = 'Noon Markers', size_hint = (0.25, 0.05), pos_hint = {"right":1, "top":.951})
+        noonButton.bind(on_press = lambda x: (graphSettings.ToggleNoon()))
+        graph_content.add_widget(noonButton)
+
+
 
         global ampm1
         ampm1 = "AM"#default
@@ -336,6 +368,8 @@ class Application(App):
             # Loop for grabbing buildings and data points
             ticks = []
             labels = []
+            timestamps = []
+            kilowatts = []
             for buildingNum in range(0, len(database.buildingsData)):
                 timestamps = []
                 kilowatts = []
@@ -348,6 +382,18 @@ class Application(App):
                 plt.xlabel('Timestamp')
                 plt.ylabel('Kilowatts')
                 plt.legend()
+
+            #midnight and noon lines
+            if graphSettings.midnight == True:
+                for midnight in timestamps:
+                    if (midnight % 86400) == 0:
+                        plt.axvline(x=(midnight), linestyle=('--'), color=(0,0,0,1))
+
+            #for noon in 
+            if graphSettings.noon == True:
+                for noon in timestamps:
+                    if (noon % 86400) == 43200:
+                        plt.axvline(x=(noon), linestyle =('--'), color=(1,0,0,1))
 
             tickNum = 7
             for x in range(0, tickNum):
@@ -408,3 +454,4 @@ class Application(App):
 
 if __name__ == "__main__":
     Application().run()
+
