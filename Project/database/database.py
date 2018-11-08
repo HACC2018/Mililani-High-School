@@ -3,6 +3,7 @@ import database.datatype as datatype #imports our local file datatype.py
 import calendar
 import csv
 import datetime
+import glob
 import time
 
 class Database:
@@ -15,7 +16,7 @@ class Database:
 		#look through the csv and add each building a list
 		#in the same loop get the earliest timstamp and latest
 
-		self.csv = list(glob.glob(".\\csv\\*.csv"))[0]
+		self.csv = list(glob.glob(".\\database\\csv\\*.csv"))[0]
 		with open(self.csv) as file:
 			CSVDATA = csv.reader(file, delimiter=",")
 			rowNum = 0
@@ -44,7 +45,7 @@ class Database:
 		#index of those builings we want to look at. This makes it so
 		#that we only need to store the int of its index vs the entire instance
 		csvRows = len(list(csv.reader(open(self.csv), delimiter=',')))#number of rows in csv starting at 1
-		Database.dataInterval = [int(self.SetDateToUnix(list(csv.reader(open(self.csv)), delimiter=','))[1][0]),#time at begining of csv
+		Database.dataInterval = [int(self.SetDateToUnix(list(csv.reader(open(self.csv), delimiter=','))[1][0])),#time at begining of csv
 								 int(self.SetDateToUnix(list(csv.reader(open(self.csv), delimiter=','))[csvRows - 1][0]))]
 		#add time at end of csv (subtract 1 from rows)
 		#print(Database.dataInterval[0])

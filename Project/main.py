@@ -82,7 +82,7 @@ class GraphSelect(BoxLayout):
     pie = ObjectProperty(False)
 
 global database
-database = data.Database('database/csv/AnalyticsData_20181019174047.csv')
+database = data.Database()#no csv needed, it automatically finds csvs.
 
 buildings = ['1', '2', '3', '4', '5', '6', '7']
 totalnum = 0
