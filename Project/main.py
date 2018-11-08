@@ -25,12 +25,6 @@ from kivy.graphics import Rectangle
 
 import database.database as data
 
-class GraphSettings:
-
-    def __init__(self, midnightLines, noonLines):
-        self.midnightLines = midnightLines
-        self.noonLines = nooLines
-
 #from database.database import Database
 Builder.load_string('''
 <GraphSelect>:
@@ -75,11 +69,30 @@ Builder.load_string('''
 
 ''')
 
+class GraphSettings:
 
-class GraphSelect(BoxLayout):
-    line = ObjectProperty(False)
-    bar = ObjectProperty(False)
-    pie = ObjectProperty(False)
+    def __init__(self):
+        self.midnight = False
+        self.noon = False
+
+    def ToggleMidnight(self):
+        if self.midnight == True:
+            self.midnight = False
+
+        elif self.midnight == False:
+            self.midnight = True
+
+    def ToggleNoon(self):
+        if self.noon == True:
+            self.noon = False
+
+        elif self.noon == False:
+            self.noon = True
+
+
+global graphSettings
+graphSettings = GraphSettings()
+
 
 global database
 database = data.Database()#no csv needed, it automatically finds csvs.
@@ -200,6 +213,19 @@ class Application(App):
         graph_content.add_widget(bt5)
         bt6 = ToggleButton(text='PM', group='time2', size_hint=(0.05, 0.025), pos_hint={"x": 0.57, "top": 0.85})
         graph_content.add_widget(bt6)
+
+
+
+        #graph settings
+        midnightButton = ToggleButton(text = 'Midnight Markers', size_hint = (0.25, 0.05), pos_hint = {"right":1, "top":1})
+        midnightButton.bind(on_press = lambda x: (graphSettings.ToggleMidnight()))
+        graph_content.add_widget(midnightButton)
+
+        noonButton = ToggleButton(text = 'Noon Markers', size_hint = (0.25, 0.05), pos_hint = {"right":1, "top":.951})
+        noonButton.bind(on_press = lambda x: (graphSettings.ToggleNoon()))
+        graph_content.add_widget(noonButton)
+
+
 
         global ampm1
         ampm1 = "AM"#default
@@ -342,6 +368,8 @@ class Application(App):
             # Loop for grabbing buildings and data points
             ticks = []
             labels = []
+            timestamps = []
+            kilowatts = []
             for buildingNum in range(0, len(database.buildingsData)):
                 timestamps = []
                 kilowatts = []
@@ -356,10 +384,16 @@ class Application(App):
                 plt.legend()
 
             #midnight and noon lines
-            #if 
-            #for midnight in database.unixInterval[1]
-            #plt.axvline(x=(((database.unixInterval[1] - database.unixInterval[0]) / 2) + database.unixInterval[0]))
+            if graphSettings.midnight == True:
+                for midnight in timestamps:
+                    if (midnight % 86400) == 0:
+                        plt.axvline(x=(midnight), linestyle=('--'), color=(0,0,0,1))
+
             #for noon in 
+            if graphSettings.noon == True:
+                for noon in timestamps:
+                    if (noon % 86400) == 43200:
+                        plt.axvline(x=(noon), linestyle =('--'), color=(1,0,0,1))
 
             tickNum = 7
             for x in range(0, tickNum):
